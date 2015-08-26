@@ -6,17 +6,17 @@ import (
 )
 
 func YourHandler(w http.ResponseWriter, r *http.Request) {
-	w.Write([]byte("Gorilla!\n"));
+	w.Write([]byte("Good!Cool!\n"));
 }
 
 func Hello(w http.ResponseWriter, r *http.Request){
-	w.Write([]byte("Hello\n"));
+	w.Write([]byte("Hello world\n"));
 	fmt.Println(r.URL.Path);
 }
 
 func main() {
     app := NewApplication();
+    app.Use(YourHandler);
 	app.Use(Hello);
-	app.Use(YourHandler);
     http.ListenAndServe(":3000", app);
 }
