@@ -5,18 +5,20 @@ import (
 	"fmt"
 )
 
-func YourHandler(w http.ResponseWriter, r *http.Request) {
+func YourHandler(w http.ResponseWriter,r *http.Request,ctx *Context) {
+	ctx.setStr("test","Context test\n");
 	w.Write([]byte("Good!Cool!\n"));
 }
 
-func Hello(w http.ResponseWriter, r *http.Request){
-	w.Write([]byte("Hello world\n"));
-	fmt.Println(r.URL.Path);
+func Hello(w http.ResponseWriter,r *http.Request,ctx *Context){
+	test := ctx.getStr("test");
+	fmt.Println(test);
+	w.Write([]byte("Hello world\n"+test));
 }
 
 func main() {
     app := NewApplication();
-    app.Use(Hello);
     app.Use(YourHandler);
+	app.Use(Hello);
     http.ListenAndServe(":3000", app);
 }

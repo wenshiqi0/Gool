@@ -5,43 +5,24 @@ import (
 )
 
 type Application struct{
-	middleware []http.Handler
-	context Context
-}
-
-type CTXHandler struct{
-	handler http.Handler
-	ctx *Context
-}
-
-func (self *CTXHandler) ServeHTTP (w http.ResponseWriter,r *http.Request){
-	self.handler.ServeHTTP(w,r);
-}
-
-func NewCTXHandler(f func(http.ResponseWriter,*http.Request)) *CTXHandler{
-	ctxhandler := &CTXHandler{};
-	handler := http.HandlerFunc(f);
-	ctxhandler.handler = handler;
-	return ctxhandler;
-}
-
-type Context struct{
-	strs map[string]string
-	ints map[string]int
-	flts map[string]float32
+	middleware []func(http.ResponseWriter,*http.Request,*Context)
+	context *Context
 }
 
 func NewApplication() *Application{
-	return &Application{};
+	app := &Application{};
+	app.context = NewContext();
+	return app;
 }
 
 func (self *Application) ServeHTTP (w http.ResponseWriter,r *http.Request){
-	for _,handler := range self.middleware{
-		handler.ServeHTTP(w,r);
+	for _,f := range self.middleware{
+		f(w,r,self.context)
 	}
 }
 
-func (self *Application) Use (f func(http.ResponseWriter,*http.Request)){
-	ctxhandler := NewCTXHandler(f);
-	self.middleware = append(self.middleware,ctxhandler);
+func (self *Application) Use (f func(http.ResponseWriter,*http.Request,*Context)){
+	self.middleware = append(self.middleware,f);
 }
+
+
