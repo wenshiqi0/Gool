@@ -5,23 +5,23 @@ import (
 )
 
 type Application struct{
-	middleware []func(http.ResponseWriter,*http.Request,*Context)
+	middleware []func(*Context)
 	context *Context
 }
 
 func NewApplication() *Application{
 	app := &Application{};
-	app.context = NewContext();
 	return app;
 }
 
 func (self *Application) ServeHTTP (w http.ResponseWriter,r *http.Request){
+	self.context = NewContext(w,r);
 	for _,f := range self.middleware{
-		f(w,r,self.context)
+		f(self.context)
 	}
 }
 
-func (self *Application) Use (f func(http.ResponseWriter,*http.Request,*Context)){
+func (self *Application) Use (f func(*Context)){
 	self.middleware = append(self.middleware,f);
 }
 

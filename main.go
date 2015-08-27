@@ -3,16 +3,18 @@ package main;
 import (
 	"net/http"
 	"log"
+	"fmt"
 )
 
-func YourHandler(w http.ResponseWriter,r *http.Request,ctx *Context) {
+func YourHandler(ctx *Context) {
 	ctx.set("test","Context test\n");
-	w.Write([]byte("Good!Cool!\n"));
+	ctx.res.Write([]byte("Good!Cool!\n"));
 }
 
-func Hello(w http.ResponseWriter,r *http.Request,ctx *Context){
+func Hello(ctx *Context){
 	test := ctx.get("test");
-	w.Write([]byte("Hello world\n"+test.(string)));
+	ctx.res.Write([]byte("Hello world\n"+test.(string)));
+	fmt.Println(ctx.req.URL.Path);
 }
 
 func main() {
