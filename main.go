@@ -3,6 +3,7 @@ package main;
 import (
 	"net/http"
 	"log"
+	"fmt"
 )
 
 /*
@@ -20,13 +21,14 @@ func Hello(ctx *Context){
 */
 
 func Hello(ctx *Context,id string){
+	fmt.Println(ctx.req.URL.Path);
 	ctx.res.Write([]byte(id));
 }
 
 func main() {
     app := NewApplication();
 	
-	app.Use(NewRoute().Match("/index:id").Method("GET",Hello).Do);	
+	app.Use(NewRoute().Match("/index.html").Method("GET",Hello).Do);	
 	
 	log.Fatal(http.ListenAndServe(":3000", app));	
 }

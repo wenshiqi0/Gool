@@ -3,7 +3,7 @@ package main;
 import (
 	"regexp"
 	"strings"
-	"fmt"
+	//"fmt"
 )
 
 type Route struct{
@@ -31,19 +31,17 @@ func (self *Route)Method(method string,f func(*Context,string)) *Route{
 
 func (self *Route)Do(ctx *Context){
 	mapping,id := match(ctx.req.URL.Path);
-	if(self.mapping == mapping){
+	if(self.mapping == mapping && self.method == ctx.req.Method){
 		self.do(ctx,id);
 	}
 }
 
-func Router(ctx *Context){
-	//reqUrl := ctx.req.URL.Path;
-	//mapping,id := match(reqUrl);
-}
-
 func match(str string)(mapping string,id string){
-	reg , _ := regexp.Compile(`^[a-zA-Z0-9\_\-\/]*\:([a-zA-Z0-9]*)$`);
+	reg , _ := regexp.Compile(`^[a-zA-Z0-9\_\-\/\.]*\:([a-zA-Z0-9]*)$`);
 	array := reg.FindAllSubmatch([]byte(str),-1);
+	if(array == nil){
+		return str,"";
+	}
 	mapping = strings.Split(string(array[0][0]),":")[0];
 	id = string(array[0][1]);
 	return;
