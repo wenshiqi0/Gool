@@ -1,4 +1,4 @@
-package gool;
+package main;
 
 /***********************************
 Use the channel and goroutine to make
@@ -109,12 +109,4 @@ func test(str interface{})interface{}{
 	fmt.Println(str);
 	result := "result";
 	return result;
-}
-
-func main(){
-	event := NewEvent();
-	event.Once("haha","here",test);
-	fmt.Println("gogo");
-	result := event.Emit("haha");
-	fmt.Println(result);
 }

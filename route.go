@@ -1,4 +1,4 @@
-package gool;
+package main;
 
 import (
 	"regexp"

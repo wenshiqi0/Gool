@@ -1,4 +1,4 @@
-package gool;
+package main;
 
 import (
 	"net/http"
@@ -19,6 +19,7 @@ func (self *Application) ServeHTTP (w http.ResponseWriter,r *http.Request){
 	for _,f := range self.middleware{
 		f(self.context)
 	}
+	self.context.event.Emit("log");
 }
 
 func (self *Application) Use (f func(*Context)){

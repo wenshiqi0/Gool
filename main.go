@@ -1,9 +1,8 @@
-package gool;
+package main;
 
 import (
 	"net/http"
 	"log"
-	"fmt"
 )
 
 /*
@@ -21,7 +20,6 @@ func Hello(ctx *Context){
 */
 
 func Hello(ctx *Context,id string){
-	fmt.Println(ctx.req.URL.Path);
 	ctx.res.Write([]byte(id));
 }
 
