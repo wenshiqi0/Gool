@@ -1,4 +1,4 @@
-package main;
+package gool;
 
 import (
 	"net/http"
@@ -28,6 +28,7 @@ func Hello(ctx *Context,id string){
 func main() {
     app := NewApplication();
 	
+	app.Use(Logger)
 	app.Use(NewRoute().Match("/index.html").Method("GET",Hello).Do);	
 	
 	log.Fatal(http.ListenAndServe(":3000", app));	

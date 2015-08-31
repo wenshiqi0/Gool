@@ -1,4 +1,4 @@
-package main;
+package gool;
 
 import (
 	"net/http"
@@ -8,6 +8,7 @@ type Context struct{
 	val map[interface{}]interface{}
 	res http.ResponseWriter
 	req *http.Request
+	done chan bool
 }
 
 func NewContext(res http.ResponseWriter,req *http.Request) *Context{
