@@ -5,7 +5,7 @@ import (
 )
 
 type Application struct{
-	middleware []func(*Context)
+	middleware []func(*Context) int
 	context *Context
 }
 
@@ -17,13 +17,11 @@ func NewApplication() *Application{
 func (self *Application) ServeHTTP (w http.ResponseWriter,r *http.Request){
 	self.context = NewContext(w,r);
 	for _,f := range self.middleware{
-		f(self.context)
+		_ = f(self.context);
 	}
 	self.context.event.Emit("log");
 }
 
-func (self *Application) Use (f func(*Context)){
+func (self *Application) Use (f func(*Context) int){
 	self.middleware = append(self.middleware,f);
 }
-
-

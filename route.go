@@ -15,6 +15,8 @@ type Route struct{
 
 func NewRoute() *Route{
 	route := &Route{};
+	route.mapping = "";
+	route.do = nil;
 	return route;
 }
 
@@ -29,11 +31,20 @@ func (self *Route)Method(method string,f func(*Context,string)) *Route{
 	return self;
 }
 
-func (self *Route)Do(ctx *Context){
+func (self *Route)Do(ctx *Context) int{
 	mapping,id := match(ctx.req.URL.Path);
 	if(self.mapping == mapping && self.method == ctx.req.Method){
 		self.do(ctx,id);
+		return 0;
 	}
+	return 1;
+}
+
+func (self *Route)IsEmpty() bool{
+	if(self.do == nil || self.mapping == ""){
+		return true;
+	}
+	return false;
 }
 
 func match(str string)(mapping string,id string){

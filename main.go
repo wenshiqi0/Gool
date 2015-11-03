@@ -5,29 +5,37 @@ import (
 	"log"
 )
 
-/*
-func YourHandler(ctx *Context) {
-	ctx.set("test","Context test\n");
-	ctx.res.Write([]byte("Good!Cool!\n"));
-}
-
-func Hello(ctx *Context){
-	test := ctx.get("test");
-	header := ctx.res.Header();
-	ctx.res.Write([]byte("Hello world\n"+test.(string)+"\n"+header.Get("Date")));
-	fmt.Println(ctx.req.URL.Path);
-}
-*/
-
 func Hello(ctx *Context,id string){
 	ctx.res.Write([]byte(id));
+}
+
+func RegisterUser(ctx *Context,name string){
+	ctx.req.ParseForm();
+	user := ctx.req.PostForm.Get("pass");
+	ctx.res.Write([]byte(name));
+	ctx.res.Write([]byte(user));
+}
+
+func GetUser(ctx *Context,name string){
+	ctx.res.Write([]byte(name));
+	ctx.res.Write([]byte("this is a GET method"));
 }
 
 func main() {
     app := NewApplication();
 	
-	app.Use(Logger)
-	app.Use(NewRoute().Match("/index.html").Method("GET",Hello).Do);	
+	app.Use(Logger);
+	
+	app.Use(NewRoute().
+			Match("/index.html").
+			Method("GET",Hello).
+			Do);	
+					
+	app.Use(NewRouter().
+			setUrl("/user").
+			setGET(GetUser).
+			setPOST(RegisterUser).
+			Do);
 	
 	log.Fatal(http.ListenAndServe(":3000", app));	
 }

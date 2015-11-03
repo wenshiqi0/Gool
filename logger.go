@@ -24,7 +24,7 @@ func onLog(param interface {})interface{}{
 	return inter;
 }
 
-func Logger(ctx *Context){
+func Logger(ctx *Context) int{
 	comeTime := time.Now();
 	url := ctx.req.URL.Path;
 	method := ctx.req.Method;
@@ -32,4 +32,5 @@ func Logger(ctx *Context){
 	fmt.Println(comeIn);
 	info := &LogInfo{url,method,comeTime};
 	ctx.event.Once("log",info,onLog);
+	return 0;
 }
