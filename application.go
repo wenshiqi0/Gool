@@ -17,7 +17,10 @@ func NewApplication() *Application{
 func (self *Application) ServeHTTP (w http.ResponseWriter,r *http.Request){
 	self.context = NewContext(w,r);
 	for _,f := range self.middleware{
-		_ = f(self.context);
+		result := f(self.context);
+		if(result == 0){
+			break;
+		}
 	}
 	self.context.event.Emit("log");
 }

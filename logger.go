@@ -32,5 +32,5 @@ func Logger(ctx *Context) int{
 	fmt.Println(comeIn);
 	info := &LogInfo{url,method,comeTime};
 	ctx.event.Once("log",info,onLog);
-	return 0;
+	return 1;
 }
