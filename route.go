@@ -48,7 +48,7 @@ func (self *Route)IsEmpty() bool{
 }
 
 func match(str string)(mapping string,id string){
-	reg , _ := regexp.Compile(`^[a-zA-Z0-9\_\-\/\.]*\:([a-zA-Z0-9]*)$`);
+	reg , _ := regexp.Compile(`^[a-zA-Z0-9\_\-\/\.]*\:([a-zA-Z0-9\/\.\|]*)$`);
 	array := reg.FindAllSubmatch([]byte(str),-1);
 	if(array == nil){
 		return str,"";
